@@ -100,7 +100,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             node_type_name = "addressable node"
 
-        ret = self._heading(heading_level, f"{node.inst_name} {node_type_name}")
+        ret = self._heading(heading_level, f"<a name={node.inst_name}></a> {node.inst_name} {node_type_name}")
         ret += self._addrnode_info_md(node) + "\n\n"
         desc = node.get_html_desc()
         if desc is not None:
@@ -119,7 +119,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         identifier = node.inst_name
         if node.is_array:
             assert node.array_dimensions is not None
-            identifier += "".join(f"[{dim}]" for dim in node.array_dimensions)
+            identifier += "".join(f"[{node.current_idx[0]}]")
         name = self._node_name_sanitized(node)
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
