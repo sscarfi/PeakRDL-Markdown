@@ -1,6 +1,6 @@
 """PeakRDL Markdown exporter."""
 
-__authors__ = ["Marek Pikuła <marek.pikula at embevity.com>"]
+__authors__ = ["Marek Piku��a <marek.pikula at embevity.com>"]
 
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -54,9 +54,9 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         """Generate AddressableNode basic information dictionary."""
         ret: "OrderedDict[str, str]" = OrderedDict()
 
-        ret["Absolute Address"] = f"0x{node.absolute_address:X}"
-        ret["Base Offset"] = f"0x{node.raw_address_offset:X}"
-        ret["Size"] = f"0x{node.size:X}"
+        ret["Absolute Address"] = f"0x{node.absolute_address:X}"+" (in decimal "+f"{node.absolute_address:d})"
+        ret["Base Offset"] = f"0x{node.raw_address_offset:X}"+" (in decimal "+f"{node.raw_address_offset:d})"
+        ret["Size"] = f"0x{node.size:X}"+" (in decimal "+f"{node.size:d})"
 
         if node.is_array:
             ret["Array Dimensions"] = str(node.array_dimensions)
@@ -79,7 +79,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         """
         name = node.get_html_name()
         if name is None:
-            name = "—"
+            name = "���"
         else:
             name = name.replace("\n", "")
         return name
@@ -123,7 +123,8 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         name = self._node_name_sanitized(node)
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
-        table_row["Offset"] = offset
+        table_row["Offset (Hex)"] = offset
+        table_row["Offset (Dec)"] = int(offset)
         table_row["Identifier"] = identifier
         table_row["Name"] = name
 
@@ -217,12 +218,12 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
             base_addr_digits = max(
-                map(lambda m: len(f'{m.table_row["Offset"]:X}'), members)
+                map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}'), members)
             )
             for member in members:
                 member.table_row[
-                    "Offset"
-                ] = f'0x{member.table_row["Offset"]:0{base_addr_digits}X}'
+                    "Offset (Hex)"
+                ] = f'0x{member.table_row["Offset (Hex)"]:0{base_addr_digits}X}'
 
             gen += (
                 markdownTable([*map(lambda m: m.table_row, members)])
@@ -294,7 +295,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         if node.get_property("onwrite") is not None:
             access += ", " + node.get_property("onwrite").name
 
-        reset_value: str = node.get_property("reset", default="—")
+        reset_value: str = node.get_property("reset", default="���")
         if isinstance(reset_value, int):
             reset = f"0x{reset_value:X}"
         else:
