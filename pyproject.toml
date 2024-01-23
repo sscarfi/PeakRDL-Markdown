@@ -24,8 +24,8 @@ systemrdl-compiler = "^1.25.0"
 peakrdl = "^1.1.0"
 py-markdown-table = "^0.3.3"
 linuxdoc = "^20211220"
-Sphinx = "^5.2.3"
-sphinx-rtd-theme = "^1.0.0"
+Sphinx = { version = "^5.2.3", python = ">=3.7" } # Reports error for python <3.7
+sphinx-rtd-theme = { version = "^1.0.0", python = ">=3.7" } # Reports error for python <3.7
 m2r2 = "<0.3.3"
 dataclasses = { version = "^0.8", python = "<3.7" } # Existing in python >=3.7
 
