@@ -120,7 +120,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         data_w = node.owning_addrmap.get_property("udp_data_bus_width") if node.owning_addrmap.get_property("udp_data_bus_width") else 8
         div = int(data_w/8) if node.owning_addrmap.get_property("udp_use_word_addressing") else 1
         
-        offset = hex(node.address_offset/div)
+        offset = hex(int(node.address_offset/div))
         identifier = node.inst_name
         if node.is_array:
             assert node.array_dimensions is not None
