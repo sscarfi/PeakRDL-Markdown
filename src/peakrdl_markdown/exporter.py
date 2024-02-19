@@ -129,7 +129,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Offset (Hex)"] = offset
-        table_row["Offset (Dec)"] = int(offset)
+        table_row["Offset (Dec)"] = int(node.address_offset/div)
         table_row["Identifier"] = identifier
         table_row["Name"] = name
 
