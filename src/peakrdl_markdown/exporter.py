@@ -56,8 +56,8 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         data_w = rdl_root.get_property("udp_data_bus_width") if rdl_root.get_property("udp_data_bus_width") else 8
         div = int(data_w/8) if rdl_root.get_property("udp_use_word_addressing") else 1
 
-        ret["Absolute Address"] = f"0x{{node.absolute_address/div}:X}"+" (in decimal "+f"{{node.absolute_address/div}:d})"
-        ret["Base Offset"] = f"0x{{node.raw_address_offset/div}:X}"+" (in decimal "+f"{{node.raw_address_offset/div}:d})"
+        ret["Absolute Address"] = f"0x{node.absolute_address/div:X}"+" (in decimal "+f"{node.absolute_address/div:d})"
+        ret["Base Offset"] = f"0x{node.raw_address_offset/div:X}"+" (in decimal "+f"{node.raw_address_offset/div:d})"
         ret["Size"] = f"0x{node.size:X}"+" (in decimal "+f"{node.size:d})"
 
         if node.is_array:
