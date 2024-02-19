@@ -120,7 +120,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         data_w = node.owning_addrmap.get_property("udp_data_bus_width") if node.owning_addrmap.get_property("udp_data_bus_width") else 8
         div = int(data_w/8) if node.owning_addrmap.get_property("udp_use_word_addressing") else 1
         
-        offset = int(node.address_offset/div)
+        offset = hex(node.address_offset/div)
         identifier = node.inst_name
         if node.is_array:
             assert node.array_dimensions is not None
@@ -128,7 +128,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         name = self._node_name_sanitized(node)
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
-        table_row["Offset (Hex)"] = hex(offset)
+        table_row["Offset (Hex)"] = offset
         table_row["Offset (Dec)"] = int(offset)
         table_row["Identifier"] = identifier
         table_row["Name"] = name
