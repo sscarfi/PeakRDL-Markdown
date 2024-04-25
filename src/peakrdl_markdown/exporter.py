@@ -134,8 +134,8 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         if isinstance(node, RegNode):
             table_row["Register Name"] = identifier
         else:
-            table_row["Identifier"] = identifier
-            table_row["Name"] = name
+            table_row["Register Block"] = identifier
+            table_row["Module"] = name
 
         return table_row
 
