@@ -130,8 +130,12 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Offset (Hex)"] = offset
         table_row["Offset (Dec)"] = offset
-        table_row["Identifier"] = identifier
-        table_row["Name"] = name
+        # Conditionally set the column header based on the type of node
+        if isinstance(node, RegNode):
+            table_row["Register Name"] = identifier
+        else:
+            table_row["Identifier"] = identifier
+            table_row["Name"] = name
 
         return table_row
 
