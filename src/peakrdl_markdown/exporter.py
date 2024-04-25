@@ -311,13 +311,13 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Bits"] = bits
-        table_row["Field"] = field_name
-        table_row["Access"] = access
-        table_row["Default"] = reset
+        table_row["Field name"] = field_name
+        table_row["Access type"] = access
+        table_row["Default value"] = reset
 
         gen = ""
         desc = node.get_html_desc()
         if desc is not None:
-            gen = self._heading(4, f"<a name={identifier}></a>{identifier} field") + desc + "\n"
+            gen = self._heading(4, f"<a name={identifier}></a>{field_name} field") + desc + "\n"
 
         return MarkdownExporter.GenStageOutput(node, table_row, gen)
