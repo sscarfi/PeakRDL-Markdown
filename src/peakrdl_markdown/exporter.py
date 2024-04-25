@@ -202,7 +202,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         Returns:
             Generated addrmap output.
         """
-        members: List[MarkdownExporter.GenStageOutput] = []
+        members: "OrderedDict[str, List[MarkdownExporter.GenStageOutput]]" = OrderedDict()
         member_gen: str = ""
         for child in node.children(unroll=True, skip_not_present=False):
             if isinstance(child, (AddrmapNode, RegfileNode)):
