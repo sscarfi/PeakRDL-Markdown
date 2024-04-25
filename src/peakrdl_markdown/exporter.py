@@ -292,7 +292,10 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             bits = f"{node.msb}:{node.lsb}"
 
-        identifier = node.inst_name
+        register_name = node.parent.inst_name
+        field_name = node.inst_name
+        
+        identifier = f"{register_name}_{field_name}"
 
         access = node.get_property("sw").name
         if node.get_property("onread") is not None:
@@ -306,18 +309,15 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             reset = str(reset_value)
 
-        name = self._node_name_sanitized(node)
-
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Bits"] = bits
-        table_row["Identifier"] = identifier
+        table_row["Field"] = field_name
         table_row["Access"] = access
-        table_row["Reset"] = reset
-        table_row["Name"] = name
+        table_row["Default"] = reset
 
         gen = ""
         desc = node.get_html_desc()
         if desc is not None:
-            gen = self._heading(4, f"{node.inst_name} field") + desc + "\n"
+            gen = self._heading(4, f"<a name={identifier}></a>{identifier} field") + desc + "\n"
 
         return MarkdownExporter.GenStageOutput(node, table_row, gen)
