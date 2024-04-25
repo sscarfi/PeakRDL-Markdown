@@ -202,23 +202,17 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         Returns:
             Generated addrmap output.
         """
-        members: "OrderedDict[str, List[MarkdownExporter.GenStageOutput]]" = OrderedDict()
+        members: List[MarkdownExporter.GenStageOutput] = []
         member_gen: str = ""
         for child in node.children(unroll=True, skip_not_present=False):
             if isinstance(child, (AddrmapNode, RegfileNode)):
                 output = self._add_addrmap_regfile(child, msg, depth - 1)
                 member_gen += output.generated
-                if output.node.inst_name in members:
-                    members[output.node.inst_name].append(output)
-                else:
-                    members[output.node.inst_name] = [output]
+                members.append(output)
             elif isinstance(child, RegNode):
                 output = self._add_reg(child, msg)
                 member_gen += output.generated
-                if node.inst_name in members:
-                    members[node.inst_name].append(output)
-                else:
-                    members[node.inst_name] = [output]
+                members.append(output)
             else:
                 msg.warning(
                     f"Unsupported type of node ({child.__class__.__name__}) "
@@ -227,24 +221,21 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         gen: str = self._addrnode_header(node, 2)
 
-        for module, member_list in members.items():
-            print(f"Module: {module}")
-            print(f"Member list: {member_list}")
-            gen += self._heading(3, module)
+        if len(members) == 0:
+            gen += "No supported members.\n"
+        else:
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
             base_addr_digits = max(
-                map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}') if isinstance(m, MarkdownExporter.GenStageOutput) else 0, member_list)
+                map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}'), members)
             )
             for member in members:
-                print(f"Type of member: {type(member)}")
-                if isinstance(member, MarkdownExporter.GenStageOutput):
-                    member.table_row[
-                        "Offset (Hex)"
-                    ] = f'0x{member.table_row["Offset (Hex)"]:0{base_addr_digits}X}'
+                member.table_row[
+                    "Offset (Hex)"
+                ] = f'0x{member.table_row["Offset (Hex)"]:0{base_addr_digits}X}'
 
             gen += (
-                markdownTable([*map(lambda m: m.table_row, filter(lambda x: isinstance(x, MarkdownExporter.GenStageOutput), member_list))])
+                markdownTable([*map(lambda m: m.table_row, members)])
                 .setParams(row_sep="markdown", quote=False)
                 .getMarkdown()
             )
