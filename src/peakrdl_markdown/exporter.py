@@ -228,6 +228,8 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         gen: str = self._addrnode_header(node, 2)
 
         for module, member_list in members.items():
+            print(f"Module: {module}")
+            print(f"Member list: {member_list}")
             gen += self._heading(3, module)
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
@@ -235,6 +237,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
                 map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}') if isinstance(m, GenStageOutput) else 0, member_list)
             )
             for member in members:
+                print(f"Type of member: {type(member)}")
                 if isinstance(member, GenStageOutput):
                     member.table_row[
                         "Offset (Hex)"
