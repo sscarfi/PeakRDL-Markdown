@@ -299,7 +299,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         register_name = node.parent.inst_name
         field_name = node.inst_name
         
-        identifier = f"{register_name}_{field_name}"
+        identifier = f"{register_name}.{field_name}"
 
         access = node.get_property("sw").name
         if node.get_property("onread") is not None:
