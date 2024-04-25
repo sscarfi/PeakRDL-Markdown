@@ -234,17 +234,17 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
             base_addr_digits = max(
-                map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}') if isinstance(m, GenStageOutput) else 0, member_list)
+                map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}') if isinstance(m, MarkdownExporter.GenStageOutput) else 0, member_list)
             )
             for member in members:
                 print(f"Type of member: {type(member)}")
-                if isinstance(member, GenStageOutput):
+                if isinstance(member, MarkdownExporter.GenStageOutput):
                     member.table_row[
                         "Offset (Hex)"
                     ] = f'0x{member.table_row["Offset (Hex)"]:0{base_addr_digits}X}'
 
             gen += (
-                markdownTable([*map(lambda m: m.table_row, filter(lambda x: isinstance(x, GenStageOutput), member_list))])
+                markdownTable([*map(lambda m: m.table_row, filter(lambda x: isinstance(x, MarkdownExporter.GenStageOutput), member_list))])
                 .setParams(row_sep="markdown", quote=False)
                 .getMarkdown()
             )
