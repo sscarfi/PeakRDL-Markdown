@@ -208,11 +208,17 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
             if isinstance(child, (AddrmapNode, RegfileNode)):
                 output = self._add_addrmap_regfile(child, msg, depth - 1)
                 member_gen += output.generated
-                members.append(output)
+                if output.node.inst_name in members:
+                    members[output.node.inst_name].append(output)
+                else:
+                    members[output.node.inst_name] = [output]
             elif isinstance(child, RegNode):
                 output = self._add_reg(child, msg)
                 member_gen += output.generated
-                members.append(output)
+                if node.inst_name in members:
+                    members[node.inst_name].append(output)
+                else:
+                    members[node.inst_name] = [output]
             else:
                 msg.warning(
                     f"Unsupported type of node ({child.__class__.__name__}) "
@@ -221,9 +227,8 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         gen: str = self._addrnode_header(node, 2)
 
-        if len(members) == 0:
-            gen += "No supported members.\n"
-        else:
+        for module, member_list in members.items():
+            gen += self._heading(3, module)
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
             base_addr_digits = max(
