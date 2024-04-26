@@ -81,7 +81,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         """
         name = node.get_html_name()
         if name is None:
-            name = "â"
+            name = "---"
         else:
             name = name.replace("\n", "")
         return name
@@ -308,7 +308,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         if node.get_property("onwrite") is not None:
             access += ", " + node.get_property("onwrite").name
 
-        reset_value: str = node.get_property("reset", default="â")
+        reset_value: str = node.get_property("reset", default="---")
         if isinstance(reset_value, int):
             reset = f"0x{reset_value:X}"
         else:
