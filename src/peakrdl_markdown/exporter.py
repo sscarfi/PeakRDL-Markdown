@@ -320,7 +320,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Bits"] = bits
-        table_row["Field name"] = f"[{register_name__field_name}](#{register_name__field_name})"
+        table_row["Field name"] = f"[{field_name}](#{register_name__field_name})"
         table_row["Access type"] = access
         table_row["Default value"] = reset
 
