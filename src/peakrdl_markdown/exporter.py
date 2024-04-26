@@ -1,6 +1,6 @@
 """PeakRDL Markdown exporter."""
 
-__authors__ = ["Marek Pikuła <marek.pikula at embevity.com>"]
+__authors__ = ["Marek PikuÅa <marek.pikula at embevity.com>"]
 
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -81,7 +81,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         """
         name = node.get_html_name()
         if name is None:
-            name = "—"
+            name = "â"
         else:
             name = name.replace("\n", "")
         return name
@@ -119,7 +119,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         """
         data_w = node.owning_addrmap.get_property("udp_data_bus_width") if node.owning_addrmap.get_property("udp_data_bus_width") else 8
         div = int(data_w/8) if node.owning_addrmap.get_property("udp_use_word_addressing") else 1
-        
+
         offset = int(node.address_offset/div)
         identifier = node.inst_name
         if node.is_array:
@@ -132,9 +132,9 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         table_row["Offset (Dec)"] = offset
         # Conditionally set the column header based on the type of node
         if isinstance(node, RegNode):
-            table_row["Register Name"] = identifier
+            table_row["Register Name"] = f"[{identifier}](#{identifier})"
         else:
-            table_row["Register Block"] = identifier
+            table_row["Register Block"] = f"[{identifier}](#{identifier})"
             table_row["Module"] = name
 
         return table_row
@@ -186,7 +186,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         self,
         node: Union[AddrmapNode, RegfileNode],
         msg: MessageHandler,
-        depth: int,
+        depth: int
     ) -> GenStageOutput:
         """Generate addrmap or regfile.
 
@@ -202,6 +202,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         Returns:
             Generated addrmap output.
         """
+
         members: List[MarkdownExporter.GenStageOutput] = []
         member_gen: str = ""
         for child in node.children(unroll=True, skip_not_present=False):
@@ -298,7 +299,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         register_name = node.parent.inst_name
         field_name = node.inst_name
-        
+
         identifier = f"{register_name}.{field_name}"
 
         access = node.get_property("sw").name
@@ -307,7 +308,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         if node.get_property("onwrite") is not None:
             access += ", " + node.get_property("onwrite").name
 
-        reset_value: str = node.get_property("reset", default="—")
+        reset_value: str = node.get_property("reset", default="â")
         if isinstance(reset_value, int):
             reset = f"0x{reset_value:X}"
         else:
