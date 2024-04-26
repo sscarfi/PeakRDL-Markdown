@@ -300,7 +300,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         register_name = node.parent.inst_name
         field_name = node.inst_name
 
-        identifier = f"{register_name}.{field_name}"
+        register_name__field_name = f"{register_name}.{field_name}"
 
         access = node.get_property("sw").name
         if node.get_property("onread") is not None:
@@ -316,13 +316,13 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         table_row: "OrderedDict[str, Union[str, int]]" = OrderedDict()
         table_row["Bits"] = bits
-        table_row["Field name"] = field_name
+        table_row["Field name"] = f"[{register_name__field_name}](#{register_name__field_name})"
         table_row["Access type"] = access
         table_row["Default value"] = reset
 
         gen = ""
         desc = node.get_html_desc()
         if desc is not None:
-            gen = self._heading(4, f"<a name={identifier}></a>{field_name} field") + desc + "\n"
+            gen = self._heading(4, f"<a name={register_name__field_name}></a>{field_name} field") + desc + "\n"
 
         return MarkdownExporter.GenStageOutput(node, table_row, gen)
