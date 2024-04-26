@@ -102,7 +102,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             node_type_name = "addressable node"
 
-        ret = self._heading(heading_level, f"<a name={node.inst_name}></a> {node.inst_name} {node_type_name}")
+        ret = self._heading(heading_level, f"<a name={node.inst_name}></a> **{node.inst_name} {node_type_name}**")
         ret += self._addrnode_info_md(node) + "\n\n"
         desc = node.get_html_desc()
         if desc is not None:
@@ -327,6 +327,6 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         gen = ""
         desc = node.get_html_desc()
         if desc is not None:
-            gen = self._heading(4, f"<a name={register_name__field_name}></a>{field_name} field") + desc + "\n"
+            gen = self._heading(4, f"<a name={register_name__field_name}></a> **{field_name} field**") + desc + "\n"
 
         return MarkdownExporter.GenStageOutput(node, table_row, gen)
