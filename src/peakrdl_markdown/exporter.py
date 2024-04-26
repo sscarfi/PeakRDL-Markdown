@@ -307,7 +307,11 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
             access += ", " + node.get_property("onread").name
         if node.get_property("onwrite") is not None:
             access += ", " + node.get_property("onwrite").name
-
+        
+        # Check if the access type is read-only
+        if access == "r":
+            access = "ro"  # Change access type to "ro"
+    
         reset_value: str = node.get_property("reset", default="---")
         if isinstance(reset_value, int):
             reset = f"0x{reset_value:X}"
