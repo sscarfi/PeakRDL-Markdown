@@ -205,11 +205,21 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
 
         members: List[MarkdownExporter.GenStageOutput] = []
         member_gen: str = ""
+        printed_addrmap_names = set()  # Set to track printed addrmap names
+
         for child in node.children(unroll=True, skip_not_present=False):
             if isinstance(child, (AddrmapNode, RegfileNode)):
-                output = self._add_addrmap_regfile(child, msg, depth - 1)
-                member_gen += output.generated
-                members.append(output)
+                addrmap_name = child.inst_name
+                if addrmap_name not in printed_addrmap_names:
+                    output = self._add_addrmap_regfile(child, msg, depth - 1)
+                    member_gen += output.generated
+                    members.append(output)
+                    printed_addrmap_names.add(addrmap_name)
+                else:
+                    output = self._add_addrmap_regfile(child, msg, 0)
+                    member_gen += output.generated
+                    members.append(output)
+                    print(member_gen)
             elif isinstance(child, RegNode):
                 output = self._add_reg(child, msg)
                 member_gen += output.generated
@@ -227,6 +237,7 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
+            print(len(members))
             base_addr_digits = max(
                 map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}'), members)
             )
@@ -307,11 +318,11 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
             access += ", " + node.get_property("onread").name
         if node.get_property("onwrite") is not None:
             access += ", " + node.get_property("onwrite").name
-        
+
         # Check if the access type is read-only
         if access == "r":
             access = "ro"  # Change access type to "ro"
-    
+
         reset_value: str = node.get_property("reset", default="---")
         if isinstance(reset_value, int):
             reset = f"0x{reset_value:X}"
