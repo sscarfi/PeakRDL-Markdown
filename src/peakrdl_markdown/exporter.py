@@ -219,7 +219,6 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
                     output = self._add_addrmap_regfile(child, msg, 0)
                     member_gen += output.generated
                     members.append(output)
-                    print(member_gen)
             elif isinstance(child, RegNode):
                 output = self._add_reg(child, msg)
                 member_gen += output.generated
@@ -237,7 +236,6 @@ class MarkdownExporter:  # pylint: disable=too-few-public-methods
         else:
             # Find the maximum width of the offset hex int and format the
             # offset for all members.
-            print(len(members))
             base_addr_digits = max(
                 map(lambda m: len(f'{m.table_row["Offset (Hex)"]:X}'), members)
             )
